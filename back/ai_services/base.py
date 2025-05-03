@@ -9,7 +9,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_anthropic import ChatAnthropic
 from typing import List, Dict
 
-load_dotenv("/workspaces/hackson_support_agent/back/.env.local")
+load_dotenv("/workspaces/lazy_agent/back/.env.local")
 
 class BaseService:
     def __init__(self,defult_model_provider: str = "google"):
@@ -31,6 +31,8 @@ class BaseService:
         
         # proモデル
         self.llm_pro = self._load_llm(defult_model_provider,"gemini-2.5-pro-exp-03-25")
+        # flashモデル
+        self.llm_flash = self._load_llm(defult_model_provider,"gemini-2.0-flash")
         # flash-thinkingモデル 仕様運転版
         self.llm_flash_thinking = self._load_llm(defult_model_provider,"gemini-2.0-flash-thinking-exp")
         # flash-liteモデル

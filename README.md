@@ -1,7 +1,25 @@
 # jackHack2025_C
 
+## WSLのインストール手順
+
+Power Shellを開いて、以下のコマンドを実行してください。
+
+```bash 
+wsl --install
+```
+その後,PCを再起動してください。
+
+
+## Dockerを入れていない方へ
+Dokcerをインストールしてください。
+
+1. [Docker Desktop](https://www.docker.com/ja-jp/)をインストールしてください。
+2. インストール後、Docker Desktopを起動してください。
+
+
+
 ## インストール手順について
- 
+
 1. まずは、リポジトリをクローンします。
 ```bash
 git clone https://github.com/jack-app/jackHack2025_C.git
