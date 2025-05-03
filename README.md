@@ -22,11 +22,13 @@ git clone https://github.com/jack-app/jackHack2025_C.git
 cd front
 npm run dev
 ```
-11. 立ち上がったら、backを立ち上げます。
+11. 今回GeminiのAPIを使用するために、APIキーを取得する必要があります。
+そこで、https://aistudio.google.com/apikey?hl=ja にアクセスし、APIキーを取得してください。
+12. 取得したAPIキーを、backディレクトリ内の.env.localファイルに以下のように記述してください。
 ```bash
-cd back
-python app.py
+GOOGLE_API_KEY=ここにAPIkeyを入れる
 ```
+
 
 ## 再起動した時には
 VSCodeを一度再起動した時には、
