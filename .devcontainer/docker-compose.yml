@@ -1,0 +1,21 @@
+services:
+  lazy_agent:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ..:/workspaces/lazy_agent:cashed
+    command: ["tail", "-f", "/dev/null"]
+  
+  db:
+    image: postgres:17
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: lazy_helper
+      POSTGRES_PASSWORD: lazy
+      POSTGRES_DB: lazy_agent
+
+volumes:
+  postgres_data:
