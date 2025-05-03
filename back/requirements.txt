@@ -1,1 +1,13 @@
 numpy
+langserve[all]
+fastapi
+uvicorn[standard]
+pydantic
+matplotlib
+pandas
+langchain
+langchain_openai
+langchain-google-genai
+langdetect
+langchain_anthropic
+json-repair

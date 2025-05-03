@@ -14,7 +14,7 @@ git clone https://github.com/jack-app/jackHack2025_C.git
 7. 立ち上がったら、ターミナルを開きます。
 8. bashを起動して以下のコマンドを実行します。
 ```bash
- sh setup.sh
+ source setup.sh
 ```
 9. しばらく待つと、必要なライブラリがインストールされます。
 10. インストールが完了したら、frontディレクトリに移動と立ち上げを次のコマンドを用いて行います。
@@ -27,3 +27,10 @@ npm run dev
 cd back
 python app.py
 ```
+
+## 再起動した時には
+VSCodeを一度再起動した時には、
+```bash
+ source setup_back.sh
+```
+をターミナルたたいて、インストール手順の8~10を実行してください。

@@ -1,7 +1,10 @@
+#!/bin/bash
 python -m venv venv
-source venv/bin/activate
+source /workspaces/lazy_agent/venv/bin/activate
 cd back
 pip install -r requirements.txt
 cd ..
 cd front 
 npm i
+cd ..
+
