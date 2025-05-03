@@ -5,7 +5,7 @@ from .base import BaseService
 from json_repair import repair_json
 from copy import deepcopy
 
-class ChatService(BaseService):
+class Scheduler(BaseService):
     def __init__(self):
         super().__init__()
     
