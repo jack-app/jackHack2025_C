@@ -34,6 +34,14 @@ git clone https://github.com/jack-app/jackHack2025_C.git
 ```bash
  source setup.sh
 ```
+( windowsのとき
+```bash
+apt install dos2unix
+```
+```bash
+dos2unix setup.sh
+```
+の後に8番を実行)
 9. しばらく待つと、必要なライブラリがインストールされます。
 10. インストールが完了したら、frontディレクトリに移動と立ち上げを次のコマンドを用いて行います。
 ```bash
