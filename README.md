@@ -8,7 +8,7 @@ Power Shellを開いて、以下のコマンドを実行してください。
 wsl --install
 ```
 その後,PCを再起動してください。
-
+Ubuntu の起動をする
 
 ## Dockerを入れていない方へ
 Dokcerをインストールしてください。
@@ -25,7 +25,7 @@ Dokcerをインストールしてください。
 git clone https://github.com/jack-app/jackHack2025_C.git
 ```
 2. 次に、クローンしたディレクトリをVSCodeで開きます。
-3. Dockerを起動しておいてください
+3. Dockerを起動しておいてください。また devcontainer拡張機能をインストールしてください。
 4. VSCode右下にある>< のアイコンをクリックする。
 5. 「Reopen in Container」を選択します。
 6. しばらく待つと、コンテナが立ち上がります。

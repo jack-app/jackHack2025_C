@@ -9,7 +9,7 @@ class ChatService(BaseService):
     def __init__(self):
         super().__init__()
 
-    def llm_chat(self, user_input:str):
+    def llm_chat(self, user_input:str)-> str:
         """
         ユーザーからの入力を受け取り、AIモデルに渡して応答を得る。
         """

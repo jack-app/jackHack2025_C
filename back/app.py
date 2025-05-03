@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 # APIルーターのインポート
+from router import chat_app
 
 app = FastAPI(
     title="LangChain Server",
@@ -20,5 +21,8 @@ app.add_middleware(
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
+
+# APIルーターの登録
+app.include_router(chat_app.router, prefix="/chat", tags=["chat"])
 
 

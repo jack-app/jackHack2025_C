@@ -14,5 +14,4 @@ cd back
 touch .env.local
 echo "DATABASE_URL="postgresql://lazy_helper:lazy@db/lazy_agent"" > .env.local
 echo "GOOGLE_API_KEY=ここにAPIkeyを入れる" >> .env.local
-
 cd ..
