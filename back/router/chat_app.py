@@ -1,6 +1,6 @@
 from fastapi import APIRouter, responses
 from pydantic import BaseModel
-from ai_services.chat import ChatService
+from back.ai_services.perfect_schedule import ChatService
 
 router = APIRouter()
 
@@ -8,11 +8,11 @@ class ChatRequest(BaseModel):
     user_input: str
 
 @router.post("/") 
-async def chat(request: ChatRequest):
+async def perfect_weekday_schedule(request: ChatRequest):
     """
     ユーザーからの入力を受け取り、AIモデルに渡して応答を得る。
     """
     chat_service = ChatService()
-    response = chat_service.llm_chat(request.user_input)
+    response = chat_service.generate_perfect_weekday_schedule(request.user_input)
     
     return responses.JSONResponse(content={"response": response})
