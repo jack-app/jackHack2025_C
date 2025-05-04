@@ -1,4 +1,5 @@
 import Header from "../components/header"
+import TimeCard from "../components/timeCard"
 
 export default function Page() {
   return (
@@ -7,6 +8,7 @@ export default function Page() {
       {/* 以下に本日のTodo画面のコンテンツを入れていきます */}
       <main className="flex-1 p-6">
         {/* Todoリスト */}
+        <TimeCard startTime="4:15" endTime="6:00" activity="お風呂"/>
       </main>
     </div>
   );
