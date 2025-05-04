@@ -1,4 +1,4 @@
-import type { Todo } from "./types/todo"
+import type { Todo } from "./types/todoType"
 
 const IDEAL_SCHEDULE: Todo[] = [
   {

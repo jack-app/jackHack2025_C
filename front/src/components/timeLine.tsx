@@ -1,4 +1,4 @@
-import type { Todo } from "../types/todo"
+import type { Todo } from "../types/todoType"
 
 type TimeLineProps = {
   todos: Todo[];
@@ -6,11 +6,16 @@ type TimeLineProps = {
 
 const TimeLine = ({ todos }: TimeLineProps) => {
   return (
-    <div className=" bg-white rounded-lg shadow-md p-4 min-w-[500px] w-fit">
-      <ul className="space-y-2">
+    <div className="bg-white rounded-lg shadow-md p-4 min-w-[500px] w-fit border border-gray-100">
+      <h3 className="text-green-600 font-medium mb-3">今日の予定</h3>
+      <ul className="space-y-3">
         {todos.map((todo, idx) => (
-          <li key={idx} className="text-sm text-gray-500">
-            {todo.startTime} ～ {todo.endTime}  {todo.activity}
+          <li 
+            key={idx} 
+            className="text-sm flex items-center border-l-2 border-green-500 pl-3 py-1 hover:bg-gray-50 transition-colors duration-200"
+          >
+            <span className="text-gray-600 font-medium">{todo.startTime} ～ {todo.endTime}</span>
+            <span className="ml-2 text-gray-800">{todo.activity}</span>
           </li>
         ))}
       </ul>
@@ -19,4 +24,3 @@ const TimeLine = ({ todos }: TimeLineProps) => {
 };
 
 export default TimeLine;
-
