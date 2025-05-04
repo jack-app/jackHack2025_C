@@ -1,4 +1,4 @@
-def hoho(is_cancel, activity, combo_number, start_time, end_time, cancel_total, is_active):
+def level_calc(is_cancel, activity, combo_number, start_time, end_time, cancel_total, is_active):
     from datetime import datetime, timedelta
 
     datetime_start = datetime.strptime(start_time, "%H:%M:%S")
