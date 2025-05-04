@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useState } from 'react';
 import Modal from './Modal';
@@ -17,7 +18,6 @@ const App = () => {
         <div className="gridgrid-item_2_profile1">なまえ</div>
         <div className="gridgrid-item_3_profile2">キャンセル</div>
       </Modal>
-
     </div>
     <div>
       
