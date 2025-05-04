@@ -2,6 +2,10 @@ import Header from "../components/header"
 import TimeCard from "../components/timeCard"
 
 export default function Page() {
+
+  
+
+
   return (
     <div className="min-h-screen flex flex-col bg-[#f1f8e8]">
       <Header />
