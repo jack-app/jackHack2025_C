@@ -1,8 +1,8 @@
-import type { Todo } from '../types/todoType'
+import type { ToDoCardPropsType } from '../types/todoType'
 import { useState } from "react"
 
 type Props = {
-  onSave: (todo: Todo) => void
+  onSave: (todo: ToDoCardPropsType) => void
 }
 
 const CreateTodo = ({ onSave }: Props) =>  {
@@ -12,7 +12,14 @@ const CreateTodo = ({ onSave }: Props) =>  {
 
   const handleSave = () => {
     if (!startTime || !endTime || !activity) return
-    onSave({ startTime, endTime, activity })
+    const todo = {
+      startTime,
+      endTime,
+      activity,
+      isDone: false,
+      isCancel: false
+    }
+    onSave(todo)
     setStartTime(''); setEndTime(''); setActivity('')
   }
 
