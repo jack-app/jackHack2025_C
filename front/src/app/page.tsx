@@ -1,8 +1,7 @@
 export default function Page() {
   return (
-    <div>
-      <h1>Welcome to Next.js!</h1>
-      <p>This is a simple page.</p>
+    <div className="flex items-center justify-center min-h-screen ">
+      <h1> Lazy Agent! </h1>
     </div>
   );
 }
