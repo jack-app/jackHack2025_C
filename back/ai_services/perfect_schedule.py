@@ -33,7 +33,6 @@ class Scheduler(BaseService):
             )
         ]
         parser = StructuredOutputParser.from_response_schemas(response_schemas)
-        parser = StructuredOutputParser.from_response_schemas(response_schemas)
         prompt_template = ChatPromptTemplate.from_template(
             template="""
             あなたはスケジュール作成の専門家です。以下の情報を基に、完璧な平日のスケジュールを生成してください。
@@ -78,7 +77,6 @@ class Scheduler(BaseService):
                 type="array[object]",
             )
         ]
-        parser = StructuredOutputParser.from_response_schemas(response_schemas)
         parser = StructuredOutputParser.from_response_schemas(response_schemas)
         prompt_template = ChatPromptTemplate.from_template(
             template="""

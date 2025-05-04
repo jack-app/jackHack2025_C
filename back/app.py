@@ -23,7 +23,10 @@ async def root():
     return {"message": "Hello World"}
 
 # APIルーターの登録
-app.include_router(shedular.router, prefix="/api/schedular", tags=["chat"])
+app.include_router(shedular.router, prefix="/api/schedular", tags=["schedular"])
+app.include_router(shedular.router, prefix="/api/level", tags=["level"])
+
+
 
 
 if __name__ == '__main__':
