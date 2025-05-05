@@ -11,6 +11,8 @@ import IDEAL_SCHEDULE from "@/dummydata";
 import LevelIndicator from "@/components/Level";
 import EnhancedTimeCard from "@/components/EnhancedTimeCard";
 import EditTodoModal from "@/components/EditTodoModal";
+import {postLevelDown} from "@/libs/postleveldown";
+import { View } from "lucide-react";
 
 
 
@@ -25,6 +27,9 @@ export default function Page() {
   const [level, setLevel] = useState(100);
   //タスク表示の状態管理
   const [showTask, setShowTask] = useState<"currentTask" | "AllTask">("currentTask");
+  const initallevel = 100;
+  const [_combo, setCombo] = useState<number>(0);  
+  const [level, setLevel] = useState<number>(initallevel);
   
   // アプリ起動時にローカルストレージからデータを読み込む
   useEffect(() => {
@@ -58,6 +63,13 @@ export default function Page() {
       localStorage.setItem('todos', JSON.stringify(todos));
       handleNowViewTask(todos);
     }
+    // レベルの状態を更新する関数
+    const updateLevel = () => {
+      const downlevel = handle_levelDown();
+      console.log("downlevel", downlevel);
+    };
+    updateLevel();
+    
   }, [todos]);
 
   // 完了状態を変更するハンドラー
@@ -78,6 +90,7 @@ export default function Page() {
       }
       setTodos(newTodos);
     }
+    setCombo(prev => prev - 1);
   };
 
   // キャンセル状態を変更するハンドラー
@@ -98,6 +111,7 @@ export default function Page() {
       }
       setTodos(newTodos);
     }
+    setCombo(prev => prev + 1);
   };
 
   // 現在時刻に基づいて処理するべきタスクを取得することができる関数
@@ -128,13 +142,15 @@ export default function Page() {
         const bStartTime = new Date(0, 0, 0, bStartHour, bStartMinute);
         return aStartTime.getTime() - bStartTime.getTime();
       });
+      console.log('upcomingTasks', upcomingTasks);
       
       if (upcomingTasks.length > 0) {
         // 次のタスクを表示
-        setViewTodos([upcomingTasks[0]]);
+        console.log('次のタスク:', upcomingTasks);
+        setViewTodos(upcomingTasks);
       } else {
-        // すべてのタスクを表示
-        setViewTodos(todos);
+        // すべてのタスクが完了している場合
+        setViewTodos([]);
       }
     } else {
       setViewTodos(nowProssingTask);
@@ -252,6 +268,7 @@ export default function Page() {
           <div className="flex flex-col-2 space-x-7">
             <LevelIndicator level={level} />
             <Clock />
+
           </div>
         </section>
           
