@@ -12,7 +12,6 @@ import LevelIndicator from "@/components/Level";
 import EnhancedTimeCard from "@/components/EnhancedTimeCard";
 import EditTodoModal from "@/components/EditTodoModal";
 import {postLevelDown} from "@/libs/postleveldown";
-import { View } from "lucide-react";
 
 
 
@@ -27,11 +26,20 @@ export default function Page() {
   const [showTask, setShowTask] = useState<"currentTask" | "AllTask">("currentTask");
   const initallevel = 100;
   const [_combo, setCombo] = useState<number>(0);  
+  const [cancelTotal, setCancelTotal] = useState<number>(0);
   const [level, setLevel] = useState<number>(initallevel);
   
   // アプリ起動時にローカルストレージからデータを読み込む
   useEffect(() => {
     const savedTodos = localStorage.getItem('todos');
+    const level = localStorage.getItem('level');
+    const combo = localStorage.getItem('_combo');
+    if (level) {
+      setLevel(Number(level));
+    }
+    if (combo) {
+      setCombo(Number(combo));
+    }
     if (savedTodos) {
       try {
         const parsedTodos = JSON.parse(savedTodos);
@@ -76,15 +84,38 @@ export default function Page() {
     // cancelTodosの数を取得する
     const cancelTotal = cancelTodos.length;
     // comboの数を取得する
-    const combo = _combo;
+    const combo = _combo + 1;
     
-    // viewTodosが空でないか確認
-    if (!viewTodos || viewTodos.length === 0) {
-      // デフォルトの動作として単純にレベルを下げる
+    // キャンセルされたタスクがあるか確認
+    if (cancelTodos.length === 0) {
+      console.log("No canceled todos found");
+      // キャンセルタスクがない場合、デフォルトの動作としてレベルを下げる
       setLevel(prev => prev - 1);
       return null;
+    }
+    
+    console.log("Using canceled todo for level down:", cancelTodos[0]);
+    
+    // 最初のキャンセルされたタスクを使ってレベルダウン処理を行う
+    const downlevel = await postLevelDown(cancelTodos[0], combo, cancelTotal);
+    console.log("downlevel", downlevel);
+    
+    if (downlevel) {
+      // APIからのレスポンスがある場合はその値でレベルを更新
+      setLevel(prev => prev + downlevel);
+    } else {
+      // レスポンスがない場合はデフォルトの動作
+      setLevel(prev => prev - 1);
+    }
+    
+    // viewTodosのチェックはレベル更新後に行う
+    if (!viewTodos || viewTodos.length === 0) {
+      console.log("viewTodos is empty or undefined");
+      return null;
+    }
+    
+    return downlevel;
   }
-  };
 
 
   // 完了状態を変更するハンドラー
@@ -105,7 +136,8 @@ export default function Page() {
       }
       setTodos(newTodos);
     }
-    setCombo(prev => prev - 1);
+    setCombo(0)
+    setCancelTotal(prev => prev - 1);
   };
 
   // キャンセル状態を変更するハンドラー
@@ -127,6 +159,7 @@ export default function Page() {
       setTodos(newTodos);
     }
     setCombo(prev => prev + 1);
+    setCancelTotal(prev => prev + 1);
   };
 
   // 現在時刻に基づいて処理するべきタスクを取得することができる関数
