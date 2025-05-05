@@ -139,13 +139,15 @@ export default function Page() {
         const bStartTime = new Date(0, 0, 0, bStartHour, bStartMinute);
         return aStartTime.getTime() - bStartTime.getTime();
       });
+      console.log('upcomingTasks', upcomingTasks);
       
       if (upcomingTasks.length > 0) {
         // 次のタスクを表示
-        setViewTodos([upcomingTasks[0]]);
+        console.log('次のタスク:', upcomingTasks);
+        setViewTodos(upcomingTasks);
       } else {
-        // すべてのタスクを表示
-        setViewTodos(todos);
+        // すべてのタスクが完了している場合
+        setViewTodos([]);
       }
     } else {
       setViewTodos(nowProssingTask);
@@ -265,7 +267,7 @@ const handle_levelDown = async () => {
     // デフォルトの動作として単純にレベルを下げる
     setLevel(prev => prev - 1);
     return null;
-  }
+}
   
   console.log('Sending to postLevelDown:', viewTodos[0]);
   
@@ -334,40 +336,6 @@ return (
           >
             すべてのタスク
           </button>
-        </div>
-        
-        {/* 右側ボタングループ */}
-        <div className="flex space-x-2">
-          {/* エクスポートボタン */}
-          <button 
-            onClick={exportToJson} 
-            className="px-3 py-1 bg-purple-500 text-white rounded flex items-center"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-            </svg>
-            エクスポート
-          </button>
-          
-          {/* インポートボタンと非表示ファイル入力 */}
-          <div className="relative">
-            <button 
-              onClick={() => document.getElementById('file-upload')?.click()} 
-              className="px-3 py-1 bg-indigo-500 text-white rounded flex items-center"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-              </svg>
-              インポート
-            </button>
-            <input 
-              id="file-upload" 
-              type="file" 
-              accept=".json" 
-              onChange={importFromJson} 
-              className="hidden" 
-            />
-          </div>
         </div>
       </div>
       
