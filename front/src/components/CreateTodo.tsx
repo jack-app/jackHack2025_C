@@ -24,7 +24,7 @@ const CreateTodo = ({ onSave }: Props) =>  {
   }
 
   return (
-    <div className="p-4 bg-white rounded shadow w-[300px]">
+    <div className="p-4 bg-white rounded shadow ">
       <input
         type="time"
         value={startTime}
