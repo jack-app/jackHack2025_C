@@ -1,15 +1,19 @@
 import React from "react";
+import Charactor from "./Charactor";
 
 type HeaderProps = {
     onProfileClick: () => void;
+    level: number;
 };
 
-const Header = ( {onProfileClick}: HeaderProps ) => {
+const Header = ( {onProfileClick, level}: HeaderProps ) => {
     return (
         <header className="bg-[#55AD9B] text-white py-4 px-6 shadow-md flex items-center justify-between relative">
         {/* 左：プロフィールアイコン */}
-        <button onClick={onProfileClick} className="flex items-center space-x-2">
-            <div className="w-10 h-10 rounded-full ring-2 ring-white bg-gray-200 flex-shrink-0" />
+        <button onClick={onProfileClick} className="flex items-center space-x-2 cursor-pointer">
+            <div className="w-12 h-12 rounded-full overflow-hidden ">
+                <Charactor level={level}/>
+            </div>    
             <span className="font-medium hover:underline">プロフィール</span>
         </button>
 

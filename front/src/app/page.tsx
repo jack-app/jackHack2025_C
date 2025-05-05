@@ -299,7 +299,7 @@ const handle_levelDown = async () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#f1f8e8] text-[#55AD9B]">
-      <Header onProfileClick={() => setIsProfileOpen(true)}/>
+      <Header onProfileClick={() => setIsProfileOpen(true)} level={DummyProfile.level}/>
       <main className="flex-1 p-6 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* レベル・時間セクション */}
         <section className="mb-5">
