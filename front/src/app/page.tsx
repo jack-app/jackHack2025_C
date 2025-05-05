@@ -8,75 +8,11 @@ import CreateTodo from "@/components/CreateTodo";
 import type { ToDoCardPropsType } from '@/types/todoType';
 import Clock from "@/components/Clock";
 import IDEAL_SCHEDULE from "@/dummydata";
-
+import LevelIndicator from "@/components/Level";
+import EnhancedTimeCard from "@/components/EnhancedTimeCard";
 import EditTodoModal from "@/components/EditTodoModal";
 
-// TimeCardコンポーネントの拡張版（編集・削除ボタン付き）
-const EnhancedTimeCard = ({ 
-  todo, 
-  index, 
-  onIsDoneChange, 
-  onIsCancelChange, 
-  onEdit, 
-  onDelete 
-}: { 
-  todo: ToDoCardPropsType, 
-  index: number, 
-  onIsDoneChange: (index: number, isDone: boolean) => void, 
-  onIsCancelChange: (index: number, isCancel: boolean) => void, 
-  onEdit: (todo: ToDoCardPropsType) => void, 
-  onDelete: (index: number) => void 
-}) => {
-  return (
-    <div className={`rounded-lg shadow-md p-4 mb-4 w-full max-w-md text-gray-500 ${
-      todo.isCancel ? 'bg-gray-100 opacity-70' : 
-      todo.isDone ? 'bg-green-50' : 'bg-white'
-    }`}>
-      <div className="flex justify-between items-center mb-2">
-        <p className="text-sm">{todo.startTime} ～ {todo.endTime}</p>
-        <div className="flex space-x-2">
-          <button 
-            onClick={() => onEdit(todo)} 
-            className="text-blue-500 hover:text-blue-700"
-            title="編集"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-            </svg>
-          </button>
-          <button 
-            onClick={() => onDelete(index)} 
-            className="text-red-500 hover:text-red-700"
-            title="削除"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-            </svg>
-          </button>
-        </div>
-      </div>
-      <p className={`mt-2 text-base font-medium text-gray-800 break-words ${todo.isCancel ? 'line-through' : ''}`}>
-        {todo.activity}
-      </p>
-      <div className="mt-4 flex justify-end space-x-2">
-        <button 
-          className={`px-3 py-1 ${todo.isDone ? 'bg-gray-400' : 'bg-green-500'} text-white rounded w-24 text-center`}
-          onClick={() => onIsDoneChange(index, !todo.isDone)}
-          disabled={todo.isCancel}
-        >
-          {todo.isDone ? '完了済み' : '完了'}
-        </button>
-        <button 
-          className={`px-3 py-1 ${todo.isCancel ? 'bg-gray-400' : 'bg-red-500'} text-white rounded font-bold w-24 text-center`}
-          onClick={() => onIsCancelChange(index, !todo.isCancel)}
-          disabled={todo.isDone}
-        >
-          {todo.isCancel ? 'キャンセル済み' : 'キャンセル'}
-        </button>
-      </div>
-    </div>
-  );
-};
+
 
 export default function Page() {
   // JSONデータの状態管理
@@ -85,6 +21,8 @@ export default function Page() {
   const [viewTodos, setViewTodos] = useState<ToDoCardPropsType[]>([]);
   // 編集中のタスク
   const [editingTodo, setEditingTodo] = useState<ToDoCardPropsType | null>(null);
+  // レベルの状態管理
+  const [level, setLevel] = useState(100);
   
   // アプリ起動時にローカルストレージからデータを読み込む
   useEffect(() => {
@@ -333,101 +271,127 @@ export default function Page() {
     }
   };
 
-  return (
-    <>
-      <div className="min-h-screen flex flex-col bg-[#f1f8e8]">
-        <Header />
-        <main className="flex-1 p-6 max-w-5xl mx-auto">
-          <div className="flex justify-between items-center mb-6">
-            <Clock />
-            
-            <div className="flex space-x-2">
-              <button 
-                onClick={handleShowCurrentTask} 
-                className="px-3 py-1 bg-green-500 text-white rounded"
-              >
-                現在のタスク
-              </button>
-              <button 
-                onClick={handleShowAllTasks} 
-                className="px-3 py-1 bg-blue-500 text-white rounded"
-              >
-                すべてのタスク
-              </button>
-            </div>
-            
-            <div className="flex space-x-2">
-              <button 
-                onClick={exportToJson} 
-                className="px-3 py-1 bg-purple-500 text-white rounded flex items-center"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                </svg>
-                エクスポート
-              </button>
-              <div className="relative">
-                <button 
-                  onClick={() => document.getElementById('file-upload')?.click()} 
-                  className="px-3 py-1 bg-indigo-500 text-white rounded flex items-center"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                  </svg>
-                  インポート
-                </button>
-                <input 
-                  id="file-upload" 
-                  type="file" 
-                  accept=".json" 
-                  onChange={importFromJson} 
-                  className="hidden" 
-                />
+return (
+  <div className="min-h-screen flex flex-col bg-[#f1f8e8]">
+    <Header />
+    <main className="flex-1 p-6 max-w-5xl mx-auto">
+      {/* 上部セクション - ボタン */}
+      <div className="flex justify-between items-center mb-6">
+        {/* 左側ボタングループ */}
+        <div className="flex space-x-2">
+          <button 
+            onClick={handleShowCurrentTask} 
+            className="px-3 py-1 bg-green-500 text-white rounded"
+          >
+            現在のタスク
+          </button>
+          <button 
+            onClick={handleShowAllTasks} 
+            className="px-3 py-1 bg-blue-500 text-white rounded"
+          >
+            すべてのタスク
+          </button>
+        </div>
+        
+        {/* 右側ボタングループ */}
+        <div className="flex space-x-2">
+          {/* エクスポートボタン */}
+          <button 
+            onClick={exportToJson} 
+            className="px-3 py-1 bg-purple-500 text-white rounded flex items-center"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            エクスポート
+          </button>
+          
+          {/* インポートボタンと非表示ファイル入力 */}
+          <div className="relative">
+            <button 
+              onClick={() => document.getElementById('file-upload')?.click()} 
+              className="px-3 py-1 bg-indigo-500 text-white rounded flex items-center"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+              </svg>
+              インポート
+            </button>
+            <input 
+              id="file-upload" 
+              type="file" 
+              accept=".json" 
+              onChange={importFromJson} 
+              className="hidden" 
+            />
+          </div>
+        </div>
+      </div>
+      
+      {/* メインコンテンツエリア - 2カラムレイアウト */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* 左カラム - レベル、時計、予定追加、タイムライン */}
+        <div className="flex flex-col">
+          {/* レベルと時計のセクション */}
+          <div className="flex flex-col mb-6">
+            <div className="flex items-center mb-4">
+              <div className="flex-1">
+                <LevelIndicator level={level} />
+              </div>
+              <div className="ml-4">
+                <Clock />
               </div>
             </div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <section className="mb-8">
-              <h1 className="text-2xl font-bold text-green-700 mb-4 border-b border-green-300 pb-2">タスク一覧</h1>
-              <div className="space-y-4">
-                {viewTodos.map((todo, index) => (
-                  <EnhancedTimeCard
-                    key={index}
-                    todo={todo}
-                    index={index}
-                    onIsDoneChange={handleIsDone}
-                    onIsCancelChange={handleIsCancel}
-                    onEdit={handleEditStart}
-                    onDelete={handleDeleteTodo}
-                  />
-                ))}
-              </div>
-            </section>
-            
-            <div className="flex flex-col">
-              <section className="mb-8">
-                <h2 className="text-xl font-bold text-green-700 mb-4 border-b border-green-300 pb-2">予定を追加</h2>
-                <CreateTodo onSave={handleAddTodo} />
-              </section>
-              
-              <section className="mb-8">
-                <h2 className="text-xl font-bold text-green-700 mb-4 border-b border-green-300 pb-2">理想の1日のスケジュール</h2>
-                <TimeLine todos={todos} />
-              </section>
-            </div>
+          {/* 予定追加セクション */}
+          <section className="mb-8">
+            <h2 className="text-xl font-bold text-green-700 mb-4 border-b border-green-300 pb-2">
+              予定を追加
+            </h2>
+            <CreateTodo onSave={handleAddTodo} />
+          </section>
+          
+          {/* タイムラインセクション */}
+          <section className="mb-8">
+            <h2 className="text-xl font-bold text-green-700 mb-4 border-b border-green-300 pb-2">
+              理想の1日のスケジュール
+            </h2>
+            <TimeLine todos={todos} />
+          </section>
+        </div>
+        
+        {/* 右カラム - タスク一覧 */}
+        <section className="mb-8">
+          <h1 className="text-2xl font-bold text-green-700 mb-4 border-b border-green-300 pb-2">
+            タスク一覧
+          </h1>
+          <div className="space-y-4">
+            {viewTodos.map((todo, index) => (
+              <EnhancedTimeCard
+                key={index}
+                todo={todo}
+                index={index}
+                onIsDoneChange={handleIsDone}
+                onIsCancelChange={handleIsCancel}
+                onEdit={handleEditStart}
+                onDelete={handleDeleteTodo}
+              />
+            ))}
           </div>
-        </main>
+        </section>
       </div>
-      
-      {/* 編集モーダル */}
-      {editingTodo && (
-        <EditTodoModal
-          todo={editingTodo}
-          onSave={handleEditSave}
-          onCancel={() => setEditingTodo(null)}
-        />
-      )}
-    </>
-  );
-}
+    </main>
+    
+    {/* 編集モーダル - 編集中のタスクがある場合のみ表示 */}
+    {editingTodo && (
+      <EditTodoModal
+        todo={editingTodo}
+        onSave={handleEditSave}
+        onCancel={() => setEditingTodo(null)}
+      />
+    )}
+  </div>
+);
+};
+

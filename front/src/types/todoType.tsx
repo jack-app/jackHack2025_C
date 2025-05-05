@@ -22,3 +22,12 @@ export type TimeCardPropsType = {
   isCancel: boolean,
   isCancelHandler: (isCancel: boolean) => void
 }
+
+export type LevelDownCombo = {
+  startTime: string
+  endTime:   string
+  activity:  string
+  isDone : boolean,
+  isCancel: boolean,
+  combo: number,
+}
