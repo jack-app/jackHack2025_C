@@ -23,8 +23,6 @@ export default function Page() {
   const [viewTodos, setViewTodos] = useState<ToDoCardPropsType[]>([]);
   // 編集中のタスク
   const [editingTodo, setEditingTodo] = useState<ToDoCardPropsType | null>(null);
-  // レベルの状態管理
-  const [level, setLevel] = useState(100);
   //タスク表示の状態管理
   const [showTask, setShowTask] = useState<"currentTask" | "AllTask">("currentTask");
   const initallevel = 100;
