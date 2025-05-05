@@ -13,6 +13,7 @@ import EnhancedTimeCard from "@/components/EnhancedTimeCard";
 import EditTodoModal from "@/components/EditTodoModal";
 import {postLevelDown} from "@/libs/postleveldown";
 import { View } from "lucide-react";
+import ProfileModal from "../components/ProfileModal"
 
 
 
@@ -28,6 +29,14 @@ export default function Page() {
   const initallevel = 100;
   const [_combo, setCombo] = useState<number>(0);  
   const [level, setLevel] = useState<number>(initallevel);
+  const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false);
+
+  // ダミーデータ(プロフィール用)
+  const DummyProfile = {
+    name: "甘梅雨 ねむり",
+    level: 100,
+    canceledCount: 50
+  };
   
   // アプリ起動時にローカルストレージからデータを読み込む
   useEffect(() => {
@@ -256,6 +265,7 @@ export default function Page() {
     setShowTask("currentTask");
   };
 
+
   // 1分ごとに現在のタスクを更新
   useEffect(() => {
     // 初回レンダリング時にhandleNowViewTaskを実行する
@@ -275,7 +285,7 @@ export default function Page() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#f1f8e8] text-[#55AD9B]">
-      <Header />
+      <Header onProfileClick={() => setIsProfileOpen(true)}/>
       <main className="flex-1 p-6 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* レベル・時間セクション */}
         <section className="mb-5">
@@ -359,6 +369,17 @@ export default function Page() {
           onCancel={() => setEditingTodo(null)}
         />
       )}
+
+      {/* プロフィールモーダル */}
+      <ProfileModal
+        isOpen={isProfileOpen}
+        onClose={() => setIsProfileOpen(false)}
+        onEdit={() => {
+          /* 編集処理があれば */
+        }}
+        profile={DummyProfile}
+      />
+
     </div>
   );
 };
