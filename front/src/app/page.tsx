@@ -70,6 +70,23 @@ export default function Page() {
     
   }, [todos]);
 
+  const handle_levelDown = async () => {
+    // todosの中から、iscancelがtrueのものを取得する
+    const cancelTodos = todos.filter(todo => todo.isCancel);
+    // cancelTodosの数を取得する
+    const cancelTotal = cancelTodos.length;
+    // comboの数を取得する
+    const combo = _combo;
+    
+    // viewTodosが空でないか確認
+    if (!viewTodos || viewTodos.length === 0) {
+      // デフォルトの動作として単純にレベルを下げる
+      setLevel(prev => prev - 1);
+      return null;
+  }
+  };
+
+
   // 完了状態を変更するハンドラー
   const handleIsDone = (index: number, isDone: boolean) => {
     const newTodos = [...todos];
