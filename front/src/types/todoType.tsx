@@ -32,3 +32,10 @@ export type LevelDownCombo = {
   cancel_total: number,
   conmbo_number: number,
 }
+
+export type ProfilePropsType = {
+  isOpen: boolean;
+  onClose: () => void;
+  onEdit?: () => void;
+  profile: {name: string, level:number, canceledCount: number}
+}
