@@ -1,16 +1,13 @@
 "use client";
 import React, { useState,useEffect } from "react";
 
-import { getSchedular } from "@/libs/getSchedular";
-import TimeCard from "@/components/timeCard";
-import { schedularType } from "@/types/baseType";
-import Clock from "@/components/Clock";
-
+import Charactor from "@/components/Charactor"
 
 export default function Test() {
+    const level = -300
     return (
         <>
-            <Clock />
+         <Charactor level={level}/>
         </>
     );
 }
