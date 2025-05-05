@@ -36,7 +36,7 @@ class Scheduler(BaseService):
         prompt_template = ChatPromptTemplate.from_template(
             template="""
             あなたはスケジュール作成の専門家です。以下の情報を基に、完璧な平日のスケジュールを生成してください。
-            ただし以下の、ユーザの指示に従ってください。
+            ただし以下の、ユーザの指示に従ってください。以下はすでに決まっているユーザのスケジュールです。この予定を考慮して、スケジュールを生成してください。
             {user_input}
             ただし、スケジュールは確実にJSON形式で返してください。
             

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Header from "@/components/header";
-import TimeCard from "@/components/timeCard";
 import TimeLine from "@/components/timeLine";
 import CreateTodo from "@/components/CreateTodo";
 import type { ToDoCardPropsType } from '@/types/todoType';
@@ -12,8 +11,10 @@ import LevelIndicator from "@/components/Level";
 import EnhancedTimeCard from "@/components/EnhancedTimeCard";
 import EditTodoModal from "@/components/EditTodoModal";
 import {postLevelDown} from "@/libs/postleveldown";
-import { View } from "lucide-react";
 import ProfileModal from "../components/ProfileModal"
+import  {getSchedular} from "@/libs/getSchedular";
+import {  schedularType } from "@/types/baseType";
+import Loading from "@/components/Loading";
 
 
 
@@ -27,45 +28,95 @@ export default function Page() {
   //タスク表示の状態管理
   const [showTask, setShowTask] = useState<"currentTask" | "AllTask">("currentTask");
   const initallevel = 100;
+  // levelの状態関数
   const [_combo, setCombo] = useState<number>(0);  
   const [level, setLevel] = useState<number>(initallevel);
   const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false);
 
-  // ダミーデータ(プロフィール用)
-  const DummyProfile = {
-    name: "甘梅雨 ねむり",
-    level: 100,
-    canceledCount: 50
-  };
+  const [load, setLoad] = useState<boolean>(true);
+
+  const [username, setUsername] = useState<string>("");
+  const [userProfile, setUserProfile] = useState({
+    name: "甘露ねむり",
+    level: 0,
+    canceledCount: 0
+  });
   
-  // アプリ起動時にローカルストレージからデータを読み込む
-  useEffect(() => {
-    const savedTodos = localStorage.getItem('todos');
-    if (savedTodos) {
+// アプリ起動時にローカルストレージからデータを読み込む
+useEffect(() => {
+  const savedTodos = localStorage.getItem('todos');
+  const savedUsername = sessionStorage.getItem('Username');
+  setUsername(savedUsername || ""); // ユーザー名をセッションストレージから取得
+  console.log("savedUsername", savedUsername);
+
+  if (savedTodos) {
+    // ローカルストレージにデータが存在する場合は、それを使用
+    try {
+      const parsedTodos = JSON.parse(savedTodos);
+      setTodos(parsedTodos);
+      setLoad(false);
+    } catch (error) {
+      console.error('保存されたtodosの解析に失敗しました:', error);
+      // 解析エラー時はデフォルトデータを使用
+      setTodos(IDEAL_SCHEDULE.map(todo => ({
+        ...todo,
+        isDone: false,
+        isCancel: false
+      })));
+      setLoad(false);
+    }
+  } else {
+    // ローカルストレージにデータがない場合はfetchして取得
+    const fetchData = async () => {
       try {
-        const parsedTodos = JSON.parse(savedTodos);
-        setTodos(parsedTodos);
+        const savedAnswers :string | null = sessionStorage.getItem('ScheduleAnswers');
+        const data = await getSchedular(savedAnswers || "");
+        if (data) {
+          const todosWithProps: ToDoCardPropsType[] = data.map((todo: schedularType) => ({
+            startTime: todo.start_time,
+            endTime: todo.end_time,
+            activity: todo.activity,
+            isDone: false,
+            isCancel: false
+          }));
+          setTodos(todosWithProps);
+          localStorage.setItem('todos', JSON.stringify(todosWithProps));
+        } else {
+          // データ取得失敗時はデフォルトデータを使用
+          setTodos(IDEAL_SCHEDULE.map(todo => ({
+            ...todo,
+            isDone: false,
+            isCancel: false
+          })));
+        setLoad(false);
+        }
       } catch (error) {
-        console.error('Failed to parse saved todos:', error);
+        console.error('データのフェッチに失敗しました:', error);
         // エラー時はデフォルトデータを使用
         setTodos(IDEAL_SCHEDULE.map(todo => ({
           ...todo,
           isDone: false,
           isCancel: false
         })));
-      }
-    } else {
-      // 保存データがない場合はデフォルトデータを使用
-      setTodos(IDEAL_SCHEDULE.map(todo => ({
-        ...todo,
-        isDone: false,
-        isCancel: false
-      })));
-    }
-  }, []);
+      } 
+    };
+
+    fetchData();
+      // ダミーデータ(プロフィール用)
+      setUserProfile({
+        name: username,
+        level: initallevel,
+        canceledCount: 0
+      });
+
+      // セッションストレージへプロフィールを保存する
+      sessionStorage.setItem('Profile', JSON.stringify(userProfile));
+  }
+}, []);
 
   // todosが変更されたときにローカルストレージに保存
   useEffect(() => {
+
     if (todos.length > 0) {
       localStorage.setItem('todos', JSON.stringify(todos));
       handleNowViewTask(todos);
@@ -76,7 +127,13 @@ export default function Page() {
       console.log("downlevel", downlevel);
     };
     updateLevel();
-    
+
+    setUserProfile({
+      name: username,
+      level: level,
+      canceledCount: todos.filter(todo => todo.isCancel).length
+    });
+    sessionStorage.setItem('Profile', JSON.stringify(userProfile));
   }, [todos]);
 
 // レベルダウンの処理を行う
@@ -89,11 +146,10 @@ const handle_levelDown = async () => {
   const combo = _combo;
   
   // viewTodosが空でないか確認
-  if (!viewTodos || viewTodos.length === 0) {
-    console.error('Error: viewTodos is empty or undefined');
+  if (viewTodos.length === 0) {
     // デフォルトの動作として単純にレベルを下げる
     setLevel(prev => prev - 1);
-    return null;
+    return;  // nullの代わりにundefinedを返す
   }
   
   console.log('Sending to postLevelDown:', viewTodos[0]);
@@ -183,8 +239,7 @@ const handle_levelDown = async () => {
       console.log('upcomingTasks', upcomingTasks);
       
       if (upcomingTasks.length > 0) {
-        // 次のタスクを表示
-        console.log('次のタスク:', upcomingTasks);
+        // 次のタスクとその次のタスクを取得する
         setViewTodos(upcomingTasks);
       } else {
         // すべてのタスクが完了している場合
@@ -297,9 +352,18 @@ const handle_levelDown = async () => {
     return () => clearInterval(interval);
   }, [todos]);
 
+  if (load) {
+
+    return (
+      <Loading />
+    );
+  }
+
+
+
   return (
     <div className="min-h-screen flex flex-col bg-[#f1f8e8] text-[#55AD9B]">
-      <Header onProfileClick={() => setIsProfileOpen(true)} level={DummyProfile.level}/>
+      <Header onProfileClick={() => setIsProfileOpen(true)} level={level}/>
       <main className="flex-1 p-6 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* レベル・時間セクション */}
         <section className="mb-5">
@@ -391,7 +455,7 @@ const handle_levelDown = async () => {
         onEdit={() => {
           /* 編集処理があれば */
         }}
-        profile={DummyProfile}
+        profile={userProfile}
       />
 
     </div>

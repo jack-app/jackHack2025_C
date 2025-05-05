@@ -6,7 +6,7 @@ export const getSchedular = async (user_input:string) => {
     const getSchedularUrl = process.env.NEXT_PUBLIC_API_URL;
     console.log("getSchedularUrl", getSchedularUrl);
 
-    try{const response = await fetch(`${getSchedularUrl}/api/schedular`, {
+    try{const response = await fetch(`${getSchedularUrl}/api/schedular/weekday`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
