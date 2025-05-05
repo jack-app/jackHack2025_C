@@ -24,10 +24,11 @@ export type TimeCardPropsType = {
 }
 
 export type LevelDownCombo = {
-  startTime: string
-  endTime:   string
+  start_time: string
+  end_time:   string
   activity:  string
-  isDone : boolean,
-  isCancel: boolean,
-  combo: number,
+  is_active : boolean,
+  is_cancel: boolean,
+  cancel_total: number,
+  conmbo_number: number,
 }

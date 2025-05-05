@@ -11,6 +11,8 @@ import IDEAL_SCHEDULE from "@/dummydata";
 import LevelIndicator from "@/components/Level";
 import EnhancedTimeCard from "@/components/EnhancedTimeCard";
 import EditTodoModal from "@/components/EditTodoModal";
+import {postLevelDown} from "@/libs/postleveldown";
+import { View } from "lucide-react";
 
 
 
@@ -22,7 +24,9 @@ export default function Page() {
   // 編集中のタスク
   const [editingTodo, setEditingTodo] = useState<ToDoCardPropsType | null>(null);
   // レベルの状態管理
-  const [level, setLevel] = useState(100);
+  const initallevel = 100;
+  const [_combo, setCombo] = useState<number>(0);  
+  const [level, setLevel] = useState<number>(initallevel);
   
   // アプリ起動時にローカルストレージからデータを読み込む
   useEffect(() => {
@@ -56,6 +60,13 @@ export default function Page() {
       localStorage.setItem('todos', JSON.stringify(todos));
       handleNowViewTask(todos);
     }
+    // レベルの状態を更新する関数
+    const updateLevel = () => {
+      const downlevel = handle_levelDown();
+      console.log("downlevel", downlevel);
+    };
+    updateLevel();
+    
   }, [todos]);
 
   // 完了状態を変更するハンドラー
@@ -76,6 +87,7 @@ export default function Page() {
       }
       setTodos(newTodos);
     }
+    setCombo(prev => prev - 1);
   };
 
   // キャンセル状態を変更するハンドラー
@@ -96,6 +108,7 @@ export default function Page() {
       }
       setTodos(newTodos);
     }
+    setCombo(prev => prev + 1);
   };
 
   // 現在時刻に基づいて処理するべきタスクを取得することができる関数
@@ -237,6 +250,36 @@ export default function Page() {
     
     return () => clearInterval(interval);
   }, [todos]);
+
+// レベルダウンの処理を行う
+const handle_levelDown = async () => {
+  // todosの中から、iscancelがtrueのものを取得する
+  const cancelTodos = todos.filter(todo => todo.isCancel);
+  // cancelTodosの数を取得する
+  const cancelTotal = cancelTodos.length;
+  // comboの数を取得する
+  const combo = _combo;
+  
+  // viewTodosが空でないか確認
+  if (!viewTodos || viewTodos.length === 0) {
+    // デフォルトの動作として単純にレベルを下げる
+    setLevel(prev => prev - 1);
+    return null;
+  }
+  
+  console.log('Sending to postLevelDown:', viewTodos[0]);
+  
+  // レベルダウンの処理を行う
+  const response = await postLevelDown(viewTodos[0], combo, cancelTotal);
+  
+  if (response) {
+    setLevel(prev => prev + response);
+  } else {
+    setLevel(prev => prev - 1);
+  }
+  
+  return response;
+}
 
   // JSONデータをエクスポート
   const exportToJson = () => {

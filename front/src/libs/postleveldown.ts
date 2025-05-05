@@ -1,15 +1,20 @@
 import {ToDoCardPropsType,LevelDownCombo } from '@/types/todoType'
 
-export const postLevelDown = async (data: ToDoCardPropsType,combo:number) => {
+type responseType = {
+    response: number
+}
+
+export const postLevelDown = async (data: ToDoCardPropsType,combo:number,cancelTotal:number) => {
     const postLevelDownUrl = process.env.NEXT_PUBLIC_API_URL;
 
     const levelDownData: LevelDownCombo = {
-        startTime: data.startTime,
-        endTime: data.endTime,
+        start_time: data.startTime,
+        end_time: data.endTime,
         activity: data.activity,
-        isDone: data.isDone,
-        isCancel: data.isCancel,
-        combo: combo,
+        is_active: data.isDone,
+        is_cancel: data.isCancel,
+        cancel_total: cancelTotal,
+        conmbo_number: combo,
     };
     console.log("postLevelDownUrl", postLevelDownUrl);
     console.log("levelDownData", levelDownData);
@@ -22,8 +27,8 @@ export const postLevelDown = async (data: ToDoCardPropsType,combo:number) => {
             },
             body: JSON.stringify(levelDownData),
         });
-        const result = await response.json();
-        return result;
+        const result : responseType = await response.json();
+        return result.response;
     } catch (error) {
         console.error('Error:', error);
         return null;
