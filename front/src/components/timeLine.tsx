@@ -12,9 +12,9 @@ const TimeLine = ({ todos }: TimeLineProps) => {
         {todos.map((todo, idx) => (
           <li 
             key={idx} 
-            className="text-sm flex items-center border-l-2 border-green-500 pl-3 py-1 hover:bg-gray-50 transition-colors duration-200"
+            className="text-sm flex space-x-3 items-start border-l-2 border-green-500 pl-3 py-1 hover:bg-gray-50 transition-colors duration-200"
           >
-            <span className="text-gray-600 font-medium">{todo.startTime} ～ {todo.endTime}</span>
+            <span className="text-gray-600 font-medium whitespace-nowrap">{todo.startTime} ～ {todo.endTime}</span>
             <span className="ml-2 text-gray-800">{todo.activity}</span>
           </li>
         ))}

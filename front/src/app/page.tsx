@@ -23,6 +23,8 @@ export default function Page() {
   const [editingTodo, setEditingTodo] = useState<ToDoCardPropsType | null>(null);
   // レベルの状態管理
   const [level, setLevel] = useState(100);
+  //タスク表示の状態管理
+  const [showTask, setShowTask] = useState<"currentTask" | "AllTask">("currentTask");
   
   // アプリ起動時にローカルストレージからデータを読み込む
   useEffect(() => {
@@ -214,11 +216,13 @@ export default function Page() {
   // すべてのタスクを表示
   const handleShowAllTasks = () => {
     setViewTodos(todos);
+    setShowTask("AllTask");
   };
 
   // 現在のタスクのみを表示
   const handleShowCurrentTask = () => {
     handleNowViewTask(todos);
+    setShowTask("currentTask");
   };
 
   // 1分ごとに現在のタスクを更新
@@ -238,134 +242,59 @@ export default function Page() {
     return () => clearInterval(interval);
   }, [todos]);
 
-  // JSONデータをエクスポート
-  const exportToJson = () => {
-    const dataStr = JSON.stringify(todos, null, 2);
-    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-    
-    const exportFileDefaultName = `todo-export-${new Date().toISOString().slice(0, 10)}.json`;
-    
-    const linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
-    linkElement.click();
-  };
-
-  // JSONデータをインポート
-  const importFromJson = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const fileReader = new FileReader();
-    if (event.target.files && event.target.files.length > 0) {
-      fileReader.readAsText(event.target.files[0], "UTF-8");
-      fileReader.onload = e => {
-        if (e.target && typeof e.target.result === 'string') {
-          try {
-            const importedTodos = JSON.parse(e.target.result);
-            setTodos(importedTodos);
-            alert('タスクをインポートしました');
-          } catch (error) {
-            console.error('Failed to parse imported file:', error);
-            alert('無効なJSONファイルです');
-          }
-        }
-      };
-    }
-  };
-
-return (
-  <div className="min-h-screen flex flex-col bg-[#f1f8e8]">
-    <Header />
-    <main className="flex-1 p-6 max-w-5xl mx-auto">
-      {/* 上部セクション - ボタン */}
-      <div className="flex justify-between items-center mb-6">
-        {/* 左側ボタングループ */}
-        <div className="flex space-x-2">
-          <button 
-            onClick={handleShowCurrentTask} 
-            className="px-3 py-1 bg-green-500 text-white rounded"
-          >
-            現在のタスク
-          </button>
-          <button 
-            onClick={handleShowAllTasks} 
-            className="px-3 py-1 bg-blue-500 text-white rounded"
-          >
-            すべてのタスク
-          </button>
-        </div>
-        
-        {/* 右側ボタングループ */}
-        <div className="flex space-x-2">
-          {/* エクスポートボタン */}
-          <button 
-            onClick={exportToJson} 
-            className="px-3 py-1 bg-purple-500 text-white rounded flex items-center"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-            </svg>
-            エクスポート
-          </button>
-          
-          {/* インポートボタンと非表示ファイル入力 */}
-          <div className="relative">
-            <button 
-              onClick={() => document.getElementById('file-upload')?.click()} 
-              className="px-3 py-1 bg-indigo-500 text-white rounded flex items-center"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-              </svg>
-              インポート
-            </button>
-            <input 
-              id="file-upload" 
-              type="file" 
-              accept=".json" 
-              onChange={importFromJson} 
-              className="hidden" 
-            />
+  return (
+    <div className="min-h-screen flex flex-col bg-[#f1f8e8] text-[#55AD9B]">
+      <Header />
+      <main className="flex-1 p-6 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* レベル・時間セクション */}
+        <section className="mb-5">
+          <h2 className="text-2xl font-bold mb-7 border-b border-green-300 pb-2 w-[85%]">Taida Time</h2>
+          <div className="flex flex-col-2 space-x-7">
+            <LevelIndicator level={level} />
+            <Clock />
           </div>
-        </div>
-      </div>
-      
-      {/* メインコンテンツエリア - 2カラムレイアウト */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* 左カラム - レベル、時計、予定追加、タイムライン */}
-        <div className="flex flex-col">
-          {/* レベルと時計のセクション */}
-          <div className="flex flex-col mb-6">
-            <div className="flex items-center mb-4">
-              <div className="flex-1">
-                <LevelIndicator level={level} />
-              </div>
-              <div className="ml-4">
-                <Clock />
-              </div>
+        </section>
+          
+        {/* 予定追加セクション */}
+        <section className="mb-5">
+          <h2 className="text-2xl font-bold mb-7 border-b border-green-300 pb-2">
+            予定を追加
+          </h2>
+          <CreateTodo onSave={handleAddTodo} />
+        </section>
+
+        {/* タスク一覧表示セクション */}
+        <section className="mb-8">
+          <div className="flex space-x-10 border-b border-green-300 mb-4 w-[85%]">
+            <h2 className="text-2xl font-bold text-[#55AD9B] pb-2">
+              タスク一覧
+            </h2>
+            <div className="flex">
+              {showTask === "currentTask" ? (
+                // currentTask 中 → 全タスク表示へ切り替え
+                <button
+                  onClick={() => {
+                    handleShowAllTasks();
+                  }}
+                  className="rounded px-3 py-1 cursor-pointer"
+                >
+                  全てのタスクを表示
+                </button>
+              ) : (
+                // AllTask 中 → 現在タスク表示へ切り替え
+                <button
+                  onClick={() => {
+                    console.log("現在タスク表示ボタンが押されました");
+                    handleShowCurrentTask();
+                  }}
+                  className="rounded px-3 py-1 cursor-pointer"
+                >
+                  直近のタスクを表示
+                </button>
+              )}
             </div>
           </div>
-          
-          {/* 予定追加セクション */}
-          <section className="mb-8">
-            <h2 className="text-xl font-bold text-green-700 mb-4 border-b border-green-300 pb-2">
-              予定を追加
-            </h2>
-            <CreateTodo onSave={handleAddTodo} />
-          </section>
-          
-          {/* タイムラインセクション */}
-          <section className="mb-8">
-            <h2 className="text-xl font-bold text-green-700 mb-4 border-b border-green-300 pb-2">
-              理想の1日のスケジュール
-            </h2>
-            <TimeLine todos={todos} />
-          </section>
-        </div>
-        
-        {/* 右カラム - タスク一覧 */}
-        <section className="mb-8">
-          <h1 className="text-2xl font-bold text-green-700 mb-4 border-b border-green-300 pb-2">
-            タスク一覧
-          </h1>
+
           <div className="space-y-4">
             {viewTodos.map((todo, index) => (
               <EnhancedTimeCard
@@ -380,18 +309,25 @@ return (
             ))}
           </div>
         </section>
-      </div>
-    </main>
-    
-    {/* 編集モーダル - 編集中のタスクがある場合のみ表示 */}
-    {editingTodo && (
-      <EditTodoModal
-        todo={editingTodo}
-        onSave={handleEditSave}
-        onCancel={() => setEditingTodo(null)}
-      />
-    )}
-  </div>
-);
+        
+        {/* タイムラインセクション */}
+        <section className="mb-8">
+          <h1 className="text-2xl font-bold mb-4 border-b border-green-300 pb-2">
+            本日のスケジュール
+          </h1>
+          <TimeLine todos={todos} />
+        </section>
+      </main>
+      
+      {/* 編集モーダル - 編集中のタスクがある場合のみ表示 */}
+      {editingTodo && (
+        <EditTodoModal
+          todo={editingTodo}
+          onSave={handleEditSave}
+          onCancel={() => setEditingTodo(null)}
+        />
+      )}
+    </div>
+  );
 };
 
