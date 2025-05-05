@@ -23,8 +23,6 @@ export default function Page() {
   const [viewTodos, setViewTodos] = useState<ToDoCardPropsType[]>([]);
   // 編集中のタスク
   const [editingTodo, setEditingTodo] = useState<ToDoCardPropsType | null>(null);
-  // レベルの状態管理
-  const [level, setLevel] = useState(100);
   //タスク表示の状態管理
   const [showTask, setShowTask] = useState<"currentTask" | "AllTask">("currentTask");
   const initallevel = 100;
@@ -71,6 +69,23 @@ export default function Page() {
     updateLevel();
     
   }, [todos]);
+
+  const handle_levelDown = async () => {
+    // todosの中から、iscancelがtrueのものを取得する
+    const cancelTodos = todos.filter(todo => todo.isCancel);
+    // cancelTodosの数を取得する
+    const cancelTotal = cancelTodos.length;
+    // comboの数を取得する
+    const combo = _combo;
+    
+    // viewTodosが空でないか確認
+    if (!viewTodos || viewTodos.length === 0) {
+      // デフォルトの動作として単純にレベルを下げる
+      setLevel(prev => prev - 1);
+      return null;
+  }
+  };
+
 
   // 完了状態を変更するハンドラー
   const handleIsDone = (index: number, isDone: boolean) => {
