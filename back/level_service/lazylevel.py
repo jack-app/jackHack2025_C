@@ -1,8 +1,9 @@
-def level_calc(is_cancel, activity, combo_number, start_time, end_time, cancel_total, is_active):
+
+def level_calc(is_cancel:bool, activity:str, combo_number:int, start_time:str, end_time:str, cancel_total:int, is_active:bool):
     from datetime import datetime, timedelta
 
-    datetime_start = datetime.strptime(start_time, "%H:%M:%S")
-    datetime_end = datetime.strptime(end_time, "%H:%M:%S")
+    datetime_start = datetime.strptime(start_time, "%H:%M")
+    datetime_end = datetime.strptime(end_time, "%H:%M")
 
     if datetime_end < datetime_start:
         datetime_end += timedelta(days=1)
@@ -24,8 +25,8 @@ def level_calc(is_cancel, activity, combo_number, start_time, end_time, cancel_t
 
     if is_cancel:
         if activity in ["朝飯", "昼飯", "晩飯", "コーヒー", "友達", "寝る", "バイト"]:
-            return -2 * combo_number * rate - cancel_count
+            return int(-2 * combo_number * rate - cancel_count)
         else:
-            return -1 * combo_number * rate - cancel_count
+            return int(-1 * combo_number * rate - cancel_count)
     else:
-        return f"start {activity}"
+        return int(1)

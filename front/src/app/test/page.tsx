@@ -8,13 +8,9 @@ import Clock from "@/components/Clock";
 
 
 export default function Test() {
-
-
-
     return (
         <>
             <Clock />
         </>
-        
     );
 }

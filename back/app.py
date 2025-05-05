@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 # APIルーターのインポート
-from router import shedular
+from router import shedular, level
 
 app = FastAPI(
     title="LangChain Server",
@@ -24,7 +24,7 @@ async def root():
 
 # APIルーターの登録
 app.include_router(shedular.router, prefix="/api/schedular", tags=["schedular"])
-app.include_router(shedular.router, prefix="/api/level", tags=["level"])
+app.include_router(level.router, prefix="/api/level", tags=["level"])
 
 
 
