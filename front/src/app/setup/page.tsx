@@ -142,7 +142,7 @@ const NemuriScheduleApp = () => {
           
           <button 
             onClick={() => {
-              router.push('/');
+              router.push('/agent');
             }}
             className="bg-green-400 hover:bg-green-500 text-white py-3 px-6 rounded-full transition-colors duration-300 text-lg font-medium shadow-sm hover:shadow"
           >
