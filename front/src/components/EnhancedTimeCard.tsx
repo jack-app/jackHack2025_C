@@ -34,7 +34,7 @@ const EnhancedTimeCard = ({
         <div className="flex space-x-2">
           <button
             onClick={() => onEdit(todo)}
-            className="text-blue-500 hover:text-blue-700"
+            className="text-blue-500 hover:text-blue-700 cursor-pointer"
             title="編集"
           >
             <svg
@@ -54,7 +54,7 @@ const EnhancedTimeCard = ({
           </button>
           <button
             onClick={() => onDelete(index)}
-            className="text-red-500 hover:text-red-700"
+            className="text-red-500 hover:text-red-700 cursor-pointer"
             title="削除"
           >
             <svg
@@ -83,18 +83,18 @@ const EnhancedTimeCard = ({
       </p>
       <div className="mt-4 flex justify-end space-x-2">
         <button
-          className={`px-3 py-1 ${
+          className={`${
             todo.isCancel ? "bg-gray-400" : "bg-green-500"
-          } text-white rounded font-bold w-36 h-14 text-center`}
+          } px-3 py-1 text-white rounded font-bold w-36 h-14 text-center cursor-pointer`}
           onClick={() => onIsCancelChange(index, !todo.isCancel)}
           disabled={todo.isDone}
         >
           {todo.isCancel ? "キャンセル済み" : "キャンセル"}
         </button>
         <button
-          className={`text-xs ${
+          className={`${
             todo.isDone ? "bg-gray-400" : "bg-red-500"
-          } text-white rounded w-12 h-6 text-center self-end`}
+          } text-xs text-white rounded w-12 h-6 text-center self-end cursor-pointer`}
           onClick={() => onIsDoneChange(index, !todo.isDone)}
           disabled={todo.isCancel}
         >
