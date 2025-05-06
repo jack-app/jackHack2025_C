@@ -1,10 +1,12 @@
 import React from "react";
+import { useRouter } from "next/navigation";
 
-function handleClick() {
-    window.location.href = "https://ja.react.dev/learn"; // ここに遷移先のURLを設定
-  }
   
   export default function StartButton() {
+    const router = useRouter();
+    const handleClick = () => {
+      router.push("/setup");
+    };
     return (
       <button
         onClick={handleClick}

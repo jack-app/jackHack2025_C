@@ -3,13 +3,20 @@ from fastapi.middleware.cors import CORSMiddleware
 # APIルーターのインポート
 from router import shedular, level , nemuri_chai
 
+# envfileの読み込み
+from dotenv import load_dotenv
+import os
+load_dotenv()
+# 環境変数の取得
+DOMAIN = os.getenv("CROSS_DOMAIN")
+
 app = FastAPI(
     title="LangChain Server",
     version="1.0"
 )
 
 # CORS設定 多分最後のurl/の/は必要ない
-origins = ["http://localhost:3000"]
+origins = [DOMAIN]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
