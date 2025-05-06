@@ -1,15 +1,16 @@
 import React from "react";
+import { useRouter } from "next/navigation";
 
-function handleClick() {
-    window.location.href = "https://ja.react.dev/learn"; // ここに遷移先のURLを設定
-  }
   
   export default function StartButton() {
+    const router = useRouter();
+    const handleClick = () => {
+      router.push("/setup");
+    };
     return (
       <button
         onClick={handleClick}
-        style={{ backgroundColor: "#55AD9B" }}
-        className="text-lg text-white px-10 py-3 rounded-2xl"
+        className="text-lg bg-green-400 text-white px-10 py-3 rounded-2xl hover:bg-green-600 transition duration-300 ease-in-out shadow-md hover:shadow-lg"
       >
         怠惰になる！
       </button>
