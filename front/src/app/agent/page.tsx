@@ -64,10 +64,8 @@ useEffect(() => {
         isDone: false,
         isCancel: false
       })));
-      setLoad(false);
     }
   } else {
-    // ローカルストレージにデータがない場合はfetchして取得
     const fetchData = async () => {
       try {
         const savedAnswers :string | null = sessionStorage.getItem('ScheduleAnswers');
@@ -103,12 +101,12 @@ useEffect(() => {
     };
 
     fetchData();
-      // ダミーデータ(プロフィール用)
-      setUserProfile({
-        name: username,
-        level: initallevel,
-        canceledCount: 0
-      });
+    // プロフィール用
+    setUserProfile({
+      name: username,
+      level: initallevel,
+      canceledCount: 0
+    });
 
       // セッションストレージへプロフィールを保存する
       sessionStorage.setItem('Profile', JSON.stringify(userProfile));

@@ -30,7 +30,7 @@ const ProfileModal = ({
         <div className="flex flex-col items-center space-y-4">
           {/* アイコン */}
           <div className="rounded-full overflow-hidden">
-            <Charactor level={profile.level}/>
+            <Charactor level={profile.level-1}/>
           </div>
 
           {/* 名前 */}
