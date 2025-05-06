@@ -1,5 +1,7 @@
 import React from "react";
 import Charactor from "./Charactor";
+import Image from 'next/image';
+import {useRouter} from "next/navigation";
 
 type HeaderProps = {
     onProfileClick: () => void;
@@ -7,6 +9,10 @@ type HeaderProps = {
 };
 
 const Header = ( {onProfileClick, level}: HeaderProps ) => {
+    const router = useRouter();
+    const handleClick = () => {
+        router.push("/Chat")
+    }
     return (
         <header className="bg-[#55AD9B] text-white py-4 px-6 shadow-md flex items-center justify-between relative">
         {/* 左：プロフィールアイコン */}
@@ -23,7 +29,14 @@ const Header = ( {onProfileClick, level}: HeaderProps ) => {
         </h1>
 
         {/* 右：左と幅を合わせるためのプレースホルダー（なくてもOK） */}
-        <div className="w-32" />
+        <div className="w-fit p-1">
+            <button onClick={handleClick} className="flex items-center space-x-2 cursor-pointer ">
+                <div className="w-12 h-12 rounded-full overflow-hidden ">
+                    <Image src = "/imageForChat.png" width={48} height={48} alt ="chat用画像"/>
+                </div>    
+                <span>チャット</span>
+            </button>
+        </div>
         </header>
     );
 };
