@@ -29,7 +29,7 @@ const Header = ( {onProfileClick, level}: HeaderProps ) => {
         </h1>
 
         {/* 右：左と幅を合わせるためのプレースホルダー（なくてもOK） */}
-        <div className="w-fit p-1 border-2 border-[#36aa95]">
+        <div className="w-fit p-1">
             <button onClick={handleClick} className="flex items-center space-x-2 cursor-pointer ">
                 <div className="w-12 h-12 rounded-full overflow-hidden ">
                     <Image src = "/imageForChat.png" width={48} height={48} alt ="chat用画像"/>
