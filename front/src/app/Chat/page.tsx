@@ -35,13 +35,16 @@ export default function ChatPage() {
     
     // タイピングアニメーション開始
     setIsTyping(true);
+
+
+    const username = sessionStorage.getItem("Username");
     
     // API呼び出し
     try {
-      const res = await fetch("/api/chat", {
+      const res = await fetch( process.env.NEXT_PUBLIC_API_URL + "/api/nemuri", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_input: userInput }),
+        body: JSON.stringify({ user_input: userInput, user_name : username }),
       });
       const { response } = await res.json();
       
