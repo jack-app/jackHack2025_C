@@ -1,13 +1,13 @@
 "use client";
 import React, { useState,useEffect } from "react";
 
-import Charactor from "@/components/Charactor"
+import Illustration from "@/components/Illustration"
 
 export default function Test() {
     const level = -300
     return (
         <>
-         <Charactor level={level}/>
+         <Illustration/>
         </>
     );
 }
