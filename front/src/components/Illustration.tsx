@@ -1,12 +1,14 @@
+
 import React from "react";
 import Startbutton from "./Startbutton";
+import Image from "next/image";
 
 export default function Illustration() {
   return (
-    <div style={{ backgroundColor: "#f1f8e8" }} className="flex flex-col items-center justify-center min-h-screen text-white p-6">
-      {/* メインカード */}
-      <div>
-        
+    <div style={{ backgroundColor: "#f1f8e8" }} className="relative flex min-h-screen">
+    {/* メインコンテンツエリア (左側) */}
+    <div className="w-3/4 p-6">
+      <div className="max-w-3xl mx-auto">
         {/* タイトル */}
         <h1 style={{ color: "#55AD9B" }} className="text-3xl font-bold mb-6">Make You Lazy って？</h1>
 
@@ -32,7 +34,7 @@ export default function Illustration() {
           もっと人間らしい、自由で豊かな人生を歩みたいんだ！と思ったそこのあなた！
         </p>
 
-        <p className="text-black text-lg leading-relaxed mb-15">
+        <p className="text-black text-lg leading-relaxed mb-12">
           そんなあなたのために、このアプリを作りました！
         </p>
 
@@ -46,19 +48,29 @@ export default function Illustration() {
         </div>
 
         {/* 機能説明 */}
-        <ul className="text-black text-lg leading-relaxed mb-4">
-          <li className= "mb-4">
+        <ul className="text-black text-lg leading-relaxed mb-8">
+          <li className="mb-4">
             予定を追加で、開始時間と終了時間、やることを入力し、自分の理想の生活を追加可能！
           </li>
-          <li className= "mb-4">
-            タスク一覧で、追加した予定を確認できます。<p>キャンセルボタンを押すことで、生活レベルを下げることができます！</p>
+          <li className="mb-4">
+            タスク一覧で、追加した予定を確認できます。
+            <p>キャンセルボタンを押すことで、生活レベルを下げることができます！</p>
           </li>
-          <li className= "mb-4">
-        予定をキャンセルして怠惰な生活を満喫し、Lv.-999を目指しましょう！
+          <li className="mb-4">
+            予定をキャンセルして怠惰な生活を満喫し、Lv.-999を目指しましょう！
           </li>
         </ul>
+
+        <div className="mt-8 mb-12">
+          <Startbutton />
+        </div>
       </div>
-      <Startbutton/>
     </div>
+
+    {/* キャラクターエリア (右側固定) */}
+    <div className="w-2/5 fixed right-0 top-0 h-screen z-10 flex items-center justify-center p-5">
+      <Image src="/trans_tatie.png" alt="Illustration" width={400} height={400} className="w-full h-auto" />
+    </div>
+  </div>
   );
 }
