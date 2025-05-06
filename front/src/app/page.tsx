@@ -46,6 +46,7 @@ export default function Page() {
 useEffect(() => {
   const savedTodos = localStorage.getItem('todos');
   const savedUsername = sessionStorage.getItem('Username');
+
   setUsername(savedUsername || ""); // ユーザー名をセッションストレージから取得
   console.log("savedUsername", savedUsername);
 
