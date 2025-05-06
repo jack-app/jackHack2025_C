@@ -2,6 +2,7 @@
 "use client";
 import { useState, FormEvent, useRef, useEffect } from "react";
 import Image from "next/image";
+import {useRouter} from "next/navigation";
 
 type Message = {
   from: "user" | "bot";
@@ -13,6 +14,10 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [isTyping, setIsTyping] = useState(false);
+  const router = useRouter();
+  const handleClick = () => {
+      router.push("/agent")
+  }
 
   // チャットが更新されたら自動スクロール
   useEffect(() => {
@@ -59,6 +64,19 @@ export default function ChatPage() {
   return (
     <div className="min-h-screen flex bg-[#fff4dd]">
       {/* 左側1/3: キャラクター立ち絵エリア */}
+      <button
+          type="button"
+          onClick={handleClick}
+          className="
+            absolute top-4 left-4 z-10
+            flex items-center gap-1
+            bg-[#fff4dd] bg-opacity-80 hover:bg-opacity-100
+            px-3 py-1 rounded-full
+            transition
+            cursor-pointer
+      ">
+        <span className="text-sm text-gray-700">戻る</span>
+      </button>  
       <div className="w-1/3 flex flex-col items-center justify-center p-4 relative">
         <div className="relative w-full h-[80vh] flex items-center justify-center">
           <Image
